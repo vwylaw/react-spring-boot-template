@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <artifactId>demo</artifactId>
+        <groupId>com.example</groupId>
+        <version>0.0.1-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>frontend</artifactId>
+
+    <properties>
+        <npm.executable>npm</npm.executable>
+        <skip.node.package.build>false</skip.node.package.build>
+    </properties>
+
+    <build>
+        <resources>
+            <resource>
+                <directory>target/src</directory>
+            </resource>
+        </resources>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>1.6.0</version>
+                <executions>
+                    <execution>
+                        <id>install</id>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <phase>initialize</phase>
+                        <configuration>
+                            <skip>${skip.node.package.build}</skip>
+                            <executable>${npm.executable}</executable>
+                            <arguments>
+                                <argument>install</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>build</id>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <phase>generate-sources</phase>
+                        <configuration>
+                            <skip>${skip.node.package.build}</skip>
+                            <executable>${npm.executable}</executable>
+                            <arguments>
+                                <argument>run</argument>
+                                <argument>build:js</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+        </plugins>
+    </build>
+
+    <profiles>
+        <profile>
+            <id>platform-windows</id>
+            <activation>
+                <os>
+                    <family>windows</family>
+                </os>
+            </activation>
+            <properties>
+                <npm.executable>npm.cmd</npm.executable>
+            </properties>
+        </profile>
+    </profiles>
+
+</project>
